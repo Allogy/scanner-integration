@@ -16,6 +16,8 @@
 
 package com.google.zxing.integration.android;
 
+import java.util.ArrayList;
+
 /**
  * <p>Encapsulates the result of a barcode scan invoked through {@link IntentIntegrator}.</p>
  *
@@ -24,21 +26,24 @@ package com.google.zxing.integration.android;
 public final class IntentResult {
 
   private final String contents;
+  private final ArrayList<CharSequence> continuousScanBarcodeList;
   private final String formatName;
   private final byte[] rawBytes;
   private final Integer orientation;
   private final String errorCorrectionLevel;
 
   IntentResult() {
-    this(null, null, null, null, null);
+    this(null, null, null, null, null, null);
   }
 
   IntentResult(String contents,
+               ArrayList<CharSequence> continuousScanBarcodeList,
                String formatName,
                byte[] rawBytes,
                Integer orientation,
                String errorCorrectionLevel) {
     this.contents = contents;
+    this.continuousScanBarcodeList = continuousScanBarcodeList;
     this.formatName = formatName;
     this.rawBytes = rawBytes;
     this.orientation = orientation;
@@ -52,7 +57,11 @@ public final class IntentResult {
     return contents;
   }
 
-  /**
+  public ArrayList<CharSequence> getContinuousScanBarcodeList() {
+    return continuousScanBarcodeList;
+  }
+
+    /**
    * @return name of format, like "QR_CODE", "UPC_A". See {@code BarcodeFormat} for more format names.
    */
   public String getFormatName() {

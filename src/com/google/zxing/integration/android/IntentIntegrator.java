@@ -16,13 +16,6 @@
 
 package com.google.zxing.integration.android;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -34,8 +27,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.util.*;
+
 /**
- * <p>A utility class which helps ease integration with Barcode Scanner via {@link Intent}s. This is a simple
+ * <p>A utility class which helps ease integration with Barcode Scanner via {@link android.content.Intent}s. This is a simple
  * way to invoke barcode scanning and receive the result, without any need to integrate, modify, or learn the
  * project's source code.</p>
  *
@@ -47,8 +42,8 @@ import android.util.Log;
  * <p>It does require that the Barcode Scanner (or work-alike) application is installed. The
  * {@link #initiateScan()} method will prompt the user to download the application, if needed.</p>
  *
- * <p>There are a few steps to using this integration. First, your {@link Activity} must implement
- * the method {@link Activity#onActivityResult(int, int, Intent)} and include a line of code like this:</p>
+ * <p>There are a few steps to using this integration. First, your {@link android.app.Activity} must implement
+ * the method {@link android.app.Activity#onActivityResult(int, int, android.content.Intent)} and include a line of code like this:</p>
  *
  * <pre>{@code
  * public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -70,9 +65,9 @@ import android.util.Log;
  * integrator.initiateScan();
  * }</pre>
  *
- * <p>Note that {@link #initiateScan()} returns an {@link AlertDialog} which is non-null if the
+ * <p>Note that {@link #initiateScan()} returns an {@link android.app.AlertDialog} which is non-null if the
  * user was prompted to download the application. This lets the calling app potentially manage the dialog.
- * In particular, ideally, the app dismisses the dialog if it's still active in its {@link Activity#onPause()}
+ * In particular, ideally, the app dismisses the dialog if it's still active in its {@link android.app.Activity#onPause()}
  * method.</p>
  * 
  * <p>You can use {@link #setTitle(String)} to customize the title of this download prompt dialog (or, use
@@ -84,7 +79,7 @@ import android.util.Log;
  * simplified API.</p>
  * 
  * <p>By default, this will only allow applications that are known to respond to this intent correctly
- * do so. The apps that are allowed to response can be set with {@link #setTargetApplications(List)}.
+ * do so. The apps that are allowed to response can be set with {@link #setTargetApplications(java.util.List)}.
  * For example, set to {@link #TARGET_BARCODE_SCANNER_ONLY} to only target the Barcode Scanner app itself.</p>
  *
  * <h2>Sharing text via barcode</h2>
@@ -239,7 +234,7 @@ public class IntentIntegrator {
    * to their names in ZXing's {@code BarcodeFormat} class like "UPC_A". You can supply constants
    * like {@link #PRODUCT_CODE_TYPES} for example.
    *
-   * @return the {@link AlertDialog} that was shown to the user prompting them to download the app
+   * @return the {@link android.app.AlertDialog} that was shown to the user prompting them to download the app
    *   if a prompt was needed, or null otherwise
    */
   public final AlertDialog initiateScan(Collection<String> desiredBarcodeFormats) {
@@ -277,8 +272,8 @@ public class IntentIntegrator {
    *
    * @param intent Intent to start.
    * @param code Request code for the activity
-   * @see android.app.Activity#startActivityForResult(Intent, int)
-   * @see android.app.Fragment#startActivityForResult(Intent, int)
+   * @see android.app.Activity#startActivityForResult(android.content.Intent, int)
+   * @see android.app.Fragment#startActivityForResult(android.content.Intent, int)
    */
   protected void startActivityForResult(Intent intent, int code) {
     activity.startActivityForResult(intent, code);
@@ -334,8 +329,8 @@ public class IntentIntegrator {
 
 
   /**
-   * <p>Call this from your {@link Activity}'s
-   * {@link Activity#onActivityResult(int, int, Intent)} method.</p>
+   * <p>Call this from your {@link android.app.Activity}'s
+   * {@link android.app.Activity#onActivityResult(int, int, android.content.Intent)} method.</p>
    *
    * @return null if the event handled here was not related to this class, or
    *  else an {@link IntentResult} containing the result of the scan. If the user cancelled scanning,
@@ -345,12 +340,14 @@ public class IntentIntegrator {
     if (requestCode == REQUEST_CODE) {
       if (resultCode == Activity.RESULT_OK) {
         String contents = intent.getStringExtra("SCAN_RESULT");
+        ArrayList<CharSequence> continuousScanBarcodeList = intent.getCharSequenceArrayListExtra("SCAN_CONTINUOUS_RESULT");
         String formatName = intent.getStringExtra("SCAN_RESULT_FORMAT");
         byte[] rawBytes = intent.getByteArrayExtra("SCAN_RESULT_BYTES");
         int intentOrientation = intent.getIntExtra("SCAN_RESULT_ORIENTATION", Integer.MIN_VALUE);
         Integer orientation = intentOrientation == Integer.MIN_VALUE ? null : intentOrientation;
         String errorCorrectionLevel = intent.getStringExtra("SCAN_RESULT_ERROR_CORRECTION_LEVEL");
         return new IntentResult(contents,
+                                continuousScanBarcodeList,
                                 formatName,
                                 rawBytes,
                                 orientation,
@@ -376,7 +373,7 @@ public class IntentIntegrator {
    *
    * @param text the text string to encode as a barcode
    * @param type type of data to encode. See {@code com.google.zxing.client.android.Contents.Type} constants.
-   * @return the {@link AlertDialog} that was shown to the user prompting them to download the app
+   * @return the {@link android.app.AlertDialog} that was shown to the user prompting them to download the app
    *   if a prompt was needed, or null otherwise
    */
   public final AlertDialog shareText(CharSequence text, CharSequence type) {
