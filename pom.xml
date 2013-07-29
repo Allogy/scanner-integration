@@ -15,21 +15,21 @@
  limitations under the License.
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  
+
   <parent>
     <groupId>org.sonatype.oss</groupId>
     <artifactId>oss-parent</artifactId>
     <version>7</version>
   </parent>
-  
-  <modelVersion>4.0.0</modelVersion>  
-  <groupId>com.google.zxing</groupId>  
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.allogy.zxing</groupId>
   <artifactId>android-integration</artifactId>
   <packaging>jar</packaging>
   <name>ZXing Android Integration lib</name>
   <version>2.3-SNAPSHOT</version>
   <description>Integration helper classes for Android applications wanting to create/scan bar codes</description>
-  
+
   <inceptionYear>2007</inceptionYear>
   <issueManagement>
     <system>Google Code</system>
@@ -42,21 +42,21 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-  
+
   <scm>
-    <connection>scm:svn:http://zxing.googlecode.com/svn/trunk/android-integration</connection>
-    <developerConnection>scm:svn:https://zxing.googlecode.com/svn/trunk/android-integration</developerConnection>
-    <url>http://zxing.googlecode.com/svn/trunk/android-integration</url>
+    <connection>scm:git:git@github.com:Allogy/scanner-integration.git</connection>
+    <developerConnection>scm:git:git@github.com:Allogy/scanner-integration.git</developerConnection>
+    <url>https://github.com/Allogy/scanner-integration</url>
   </scm>
-  
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-  
+
   <prerequisites>
     <maven>3.0</maven>
   </prerequisites>
-  
+
   <dependencies>
     <dependency>
       <groupId>com.google.android</groupId>
@@ -68,7 +68,7 @@
       <groupId>com.google.android</groupId>
       <artifactId>support-v4</artifactId>
       <version>r7</version>
-      <scope>provided</scope>      
+      <scope>provided</scope>
       <optional>true</optional>
     </dependency>
   </dependencies>
@@ -185,7 +185,7 @@
           </execution>
         </executions>
       </plugin>
-      
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -245,7 +245,7 @@
                   <groupId>com.google.zxing</groupId>
                   <artifactId>android-integration</artifactId>
                   <version>2.3-SNAPSHOT</version>
-                  <type>jar</type>                   
+                  <type>jar</type>
                 </artifactItem>
               </artifactItems>
               <outputDirectory>../androidtest/libs</outputDirectory>
@@ -254,21 +254,37 @@
           </execution>
         </executions>
       </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-release-plugin</artifactId>
+            <version>2.3.2</version>
+            <configuration>
+                <tagNameFormat>v@{project.version}</tagNameFormat>
+                <localCheckout>true</localCheckout>
+            </configuration>
+        </plugin>
     </plugins>
+    <extensions>
+          <extension>
+              <groupId>org.kuali.maven.wagons</groupId>
+              <artifactId>maven-s3-wagon</artifactId>
+              <version>1.1.19</version>
+          </extension>
+    </extensions>
   </build>
-  
-  <distributionManagement>
-    <repository>
-      <id>sonatype-nexus-staging</id>
-      <name>Sonatype Nexus Staging</name>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-    </repository>
-    <snapshotRepository>
-      <id>sonatype-nexus-snapshots</id>
-      <name>Sonatype Nexus Snapshots</name>
-      <url>http://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-  </distributionManagement>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>allogy-maven-snapshot-public</id>
+            <name>Allogy public Maven release repository</name>
+            <url>s3://allogy.maven.public/snapshot</url>
+        </snapshotRepository>
+        <repository>
+            <id>allogy-maven-public</id>
+            <name>Allogy public Maven release repository</name>
+            <url>s3://allogy.maven.public/release</url>
+        </repository>
+    </distributionManagement>
 
   <profiles>
     <profile>
