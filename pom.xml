@@ -27,7 +27,7 @@
     <artifactId>android-integration</artifactId>
     <packaging>jar</packaging>
     <name>ZXing Android Integration lib</name>
-    <version>2.3-SNAPSHOT</version>
+    <version>2.3</version>
     <description>Integration helper classes for Android applications wanting to create/scan bar codes</description>
 
     <inceptionYear>2007</inceptionYear>
@@ -47,7 +47,8 @@
         <connection>scm:git:git@github.com:Allogy/scanner-integration.git</connection>
         <developerConnection>scm:git:git@github.com:Allogy/scanner-integration.git</developerConnection>
         <url>https://github.com/Allogy/scanner-integration</url>
-    </scm>
+      <tag>v2.3</tag>
+  </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
